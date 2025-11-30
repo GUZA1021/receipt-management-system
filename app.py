@@ -54,7 +54,6 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    print("DEBUG: LOGIN ROUTE HIT WITH METHOD:", request.method)
     if "user" in session:
         return redirect(url_for("dashboard"))
     
@@ -219,21 +218,8 @@ def get_current_user():
     user_id = session.get("user")
     if user_id is None:
         return None
-    
-    user = user_application.get_user(user_id)
-    
-    if user is None:
-        session.clear()
-        return None
         
     return user_application.get_user(user_id)
-
-def clear_broken_session():
-    user_id = session.get("user")
-    if user_id is not None:
-        user_obj = user_application.get_user(user_id)
-        if user_obj is None:
-            session.clear()
 
 if __name__ == "__main__":
     app.run(debug=True)
