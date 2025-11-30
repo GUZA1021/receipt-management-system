@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css')}}">
+    {% block css %}{% endblock %}
+    <title>{% block title %}Receipt System{% endblock %}</title>
+</head>
+<body>
+    <div class="flash"> 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <nav class = "navbar">
+        <div class="nav-title">Receipt System</div>
+        <div class="nav-links">
+            <a href="#">Dashboard</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            <a href="#">API</a>
+            <a href="/logout">Log Out</a>
+        </div>
+    </nav>
+    
+    <main class="content">
+        {% block body %}
+
+
+        {% endblock %}
+    </main>
+</body>
+</html>

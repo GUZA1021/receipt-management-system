@@ -1,0 +1,72 @@
+.register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.register-form {
+    padding: 32px 32px;
+    box-shadow: 0 4px 20px rgba(0.15, 0.15, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.register-form h2 {
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.register-form p{
+    font-size: 15px;
+    text-align: center;
+}
+
+.register-form input, .register-form select {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #c6c6c6;
+}
+
+.btn-register {
+    border-radius: 10%;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    background-color: white;
+    box-shadow: 0 4px 20px rgba(0.15, 0.15, 0, 0.15);
+}
+
+.btn-register:hover {
+    background: rgb(233, 233, 233);
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    transform: translateY(-1px);
+}
+
+
+.flash {
+    position: fixed;
+    top: 20px;
+    z-index: 999;
+    background: red;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+
+}
+
+.flashes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.flashes li {
+    background: red;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}

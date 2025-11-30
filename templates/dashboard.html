@@ -1,0 +1,96 @@
+{% extends  "base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block body %}
+<div class="dashboard">
+    <section class="header">
+        <h1>Welcome, {{user.role.value}},  {{ user.username }}</h1>
+    </section>
+
+    <section class="action">
+        <h2>What would you like to do?</h2>
+
+        {% if user.can_submit() %}
+            <p>
+                <a href="{{ url_for('new_receipt')}}">Upload New Receipt</a>
+                <!-- <a href="#">Check Receipt Status</a> -->
+            </p>
+        {% endif %}
+
+        {% if user.role.value == "ACCOUNTANT" %}
+            <p>You can handle pending receipts below.
+                <!-- <a href="{{ url_for('new_receipt')}}">Upload New Receipt</a>
+                <a href="">Handle Pending Receipts</a>
+                <a href="">View All Receipts</a> -->
+
+            </p>
+        {% endif %}
+
+
+        <section class="receipts">
+            <h2>Receipts</h2>
+
+            {% if receipts %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Submitted by</th>
+                            <th>Uploaded at</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in receipts %}
+                            <tr>
+                                <td>
+                                    <a class="" href="{{ url_for('view_receipt', receipt_id=x.id)}}">
+                                        {{ x.id }}
+                                    </a>
+                                </td>
+                                <td>{{ x.amount }}</td>
+                                <td>{{ x.status.value }}</td>
+                                <td>{{ x.submitter_id }}</td>
+                                <td>{{ x.date.strftime("%d-%m-%Y %H:%M") }}</td>
+
+                                <td>
+                                    {% if user.can_handle(x) %}
+                                        <form action="{{ url_for('handle_receipt', receipt_id=x.id)}}" method="POST">
+                                            <button type="submit">Handle</button>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if user.can_approve(x) and user.can_reject(x) %}
+                                        <div class="buttons">
+                                            <form action="{{ url_for('approve_receipt', receipt_id=x.id)}}" method="POST">
+                                                <button type="submit">Approve</button>
+                                            </form>
+
+                                            <form action="{{ url_for('reject_receipt', receipt_id=x.id)}}" method="POST">
+                                                <button type="submit">Reject</button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+
+
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p>No receipts yet.</p>
+                {% endif %}
+        </section>
+
+        </section>
+</div>
+{% endblock %}

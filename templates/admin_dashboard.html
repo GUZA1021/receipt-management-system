@@ -1,0 +1,107 @@
+{% extends  "base.html" %}
+
+{% block title %} Admin Dashboard {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block body %}
+<section class="admin_dashboard">
+    <section class="header">
+        <h1>Admin Dashboard</h1>
+    </section>
+
+    <section class="users">
+        <h2>All users</h2>
+
+        {% if users %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in users %}
+                        <tr>
+                            <td>{{ x.id }}</td>
+                            <td>{{ x.username }}</td>
+                            <td>{{ x.name }}</td>
+                            <td>{{ x.email }}</td>
+                            <td>{{ x.role.value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No users found.</p>
+        {% endif %}
+    </section>
+
+    <section class="receipts">
+        <h2>All receipts</h2>
+        {% if receipts %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Submitted by</th>
+                        <th>Uploaded at</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in receipts %}
+                        <tr>
+                            <td>{{ x.id }}</td>
+                            <td>{{ x.amount }}</td>
+                            <td>{{ x.status.value }}</td>
+                            <td>{{ x.submitter_id }}</td>
+                            <td>{{ x.date.strftime("%d-%m-%Y %H:%M") }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No receipts yet.</p>
+        {% endif %}
+    </section>
+
+    <section class="log">
+        <h2>Handling log</h2>
+        {% if receipts %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Receipt ID</th>
+                        <th>Status</th>
+                        <th>Log</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for x in receipts %}
+                        {% for y in x.handling_log %}
+                            <tr>
+                                <td>{{ x.id }}</td>
+                                <td>{{ x.status.value }}</td>
+                                <td>{{ y }}</td>
+                            </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p>No logs found.</p>
+            {% endif %}
+    </section>
+
+</section>
+
+{% endblock %}

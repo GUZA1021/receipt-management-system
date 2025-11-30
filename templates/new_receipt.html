@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Receipt{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='new_receipt.css')}}">
+{% endblock %}
+
+{% block body %}
+<section>
+    <form action="/new_receipt" method="POST">
+        <h2>Submit Receipt</h2>
+        <p><strong>Important:</strong> You MUST keep the original copy of the receipt</p>
+
+        <label for="amount">Amount in kr.</label>
+        <input type="number" name="amount" id="amount" step="0.01" placeholder="e.g 1459kr." required>
+
+        <label for="image_path">URL for receipt</label>
+        <input type="text" name="image_path" id="image_path" placeholder="e.g /image/receipt1" required>
+
+        <button type="submit" class="submit-receipt">Submit receipt</button>
+    </form>
+</section>
+
+{% endblock %}

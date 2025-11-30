@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Register User{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='register.css')}}">
+{% endblock %}
+
+{% block body %}
+<section class="register">
+
+    <form class="register-form" action="/register" method="POST">
+        <h2>Register user</h2>
+        <p>Please fill out the neccesary information to create an user</p>
+
+        <label for="username">Username</label>
+        <input type="text" name="username" placeholder="Username" required>
+
+        <label for="name">Full name</label>
+        <input type="text" name="name" placeholder="Name" required>
+
+        <label for="email">Email</label>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <label for="password">Password</label>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <label for="role">Role</label>
+        <select name="role" required>
+            <option value="SALESMAN">Salesman</option>
+            <option value="ACCOUNTANT">Accountant</option>
+            <option value="MANAGER">Manager</option>
+        </select>
+
+        <label for="manager_id">Manager ID *only for salesman</label>
+        <input type="number" name="manager_id">
+
+        <button type="submit" class="btn-register">Create User</button>
+    </form>
+</section>
+
+{% endblock %}

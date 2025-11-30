@@ -1,0 +1,49 @@
+{% extends  "base.html" %}
+
+{% block title %} Receipt {{ receipt.id }}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css')}}">
+{% endblock %}
+
+{% block body %}
+<section class="dashboard">
+    <search class="header">
+        <h1>Receipt #{{ receipt.id }}</h1>
+    </search>
+
+    <section class="receipts">
+        <table>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>{{ receipt.id }}</td>
+                </tr>
+                <tr>
+                    <td>Amount</td>
+                    <td>{{ receipt.amount }}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>{{ receipt.status.value }}</td>
+                </tr>
+                <tr>
+                    <td>Submitted by</td>
+                    <td>{{ receipt.submitter_id }}</td>
+                </tr>
+                <tr>
+                    <td>Uploaded at</td>
+                    <td>{{ receipt.date.strftime("%d-%m-%Y %H:%M") }}</td>
+                </tr>
+                <tr>
+                    <td>Image path</td>
+                    <td>{{ receipt.image_path }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </section>
+
+</section>
+
+{% endblock %}
