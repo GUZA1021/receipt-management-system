@@ -79,6 +79,15 @@ class ReceiptApplication:
     def reject(self, receipt_id, manager_id):   
         receipt = self.get_receipt(receipt_id)
 
+        if receipt is None:
+            raise ValueError("Receipt not found")
+
+        if receipt.status != ReceiptStatus.HANDLED:
+            raise ValueError("Cannot reject receipt that is not handled yet")
+
+        if receipt.submitter_id == manager_id:
+            raise ValueError("Managers cannot reject their own receipts")
+
         receipt.status = ReceiptStatus.REJECTED
         receipt.rejected_by_id = manager_id
         self.add_event(receipt, f"Rejected by {manager_id}")

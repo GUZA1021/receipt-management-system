@@ -37,7 +37,7 @@ def register():
             
             manager = user_application.get_user(int(manager_id))
 
-            if not manager.is_manager():
+            if manager is None or not manager.is_manager():
                 flash("Manager ID does not exsist")
                 return render_template("register.html")
         else:
@@ -54,7 +54,7 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
+    print("DEBUG: LOGIN ROUTE HIT WITH METHOD:", request.method)
     if "user" in session:
         return redirect(url_for("dashboard"))
     
@@ -87,7 +87,6 @@ def dashboard():
     if user is None:
         return redirect(url_for("login"))
 
-
     if user.is_salesman():
         show_receipts = receipt_application.get_user_receipt(user.id)
     elif user.is_accountant():
@@ -104,6 +103,12 @@ def dashboard():
 @app.route("/admin")
 def admin_dashboard():
     user = get_current_user()
+    
+    if user is None:
+        return redirect(url_for("login"))
+
+    if not user.is_admin():
+        return redirect(url_for("dashboard"))
 
     all_users = user_application.get_all_users()
     all_receipts = receipt_application.repo
@@ -132,17 +137,34 @@ def new_receipt():
 
 @app.route("/receipt/<int:receipt_id>")
 def view_receipt(receipt_id):
+    receipt = receipt_application.get_receipt(receipt_id)
     user = get_current_user()
     if user is None:
         return redirect(url_for("login"))
     
-    receipt = receipt_application.get_receipt(receipt_id)
+    if receipt is None:
+        flash("Receipt does not exist.")
+        return redirect(url_for("dashboard"))
+    
+    if not user.can_view(receipt):
+        flash("You cannot view this receipt.")
+        return redirect(url_for("dashboard"))
+    
     return render_template("receipt_detail.html", user=user, receipt=receipt)
+
 
 @app.route("/receipt/<int:receipt_id>/handle", methods=["POST"])
 def handle_receipt(receipt_id):
     user = get_current_user()
+    receipt = receipt_application.get_receipt(receipt_id)
 
+    if not user.is_accountant():
+        flash("Only accountants can handle receipts.")
+        return redirect(url_for("dashboard"))
+
+    if not user.can_handle(receipt):
+        flash("You cannot handle this receipt.")
+        return redirect(url_for("dashboard"))
 
     receipt_application.handle(receipt_id, user.id)
     flash(f"Receipt {receipt_id} is now handled")
@@ -152,17 +174,34 @@ def handle_receipt(receipt_id):
 @app.route("/receipt/<int:receipt_id>/approve", methods=["POST"])
 def approve_receipt(receipt_id):
     user = get_current_user()
-
     receipt = receipt_application.get_receipt(receipt_id)
+
+    if not user.is_manager():
+        flash("Only managers can approve receipts")
+        return redirect(url_for("dashboard"))
+
+    if not user.can_approve(receipt):
+        flash("You cannot approcve this receipt")
+        return redirect(url_for("dashboard"))
 
     receipt_application.approve(receipt_id, user.id)
     flash(f"Receipt {receipt_id} approved")
     return redirect(url_for("dashboard"))
 
+
 @app.route("/receipt/<int:receipt_id>/reject", methods=["POST"])
 def reject_receipt(receipt_id):
     user = get_current_user()
+    receipt = receipt_application.get_receipt(receipt_id)
 
+    if not user.is_manager():
+        flash("Only managers can reject receipts.")
+        return redirect(url_for("dashboard"))
+
+    if not user.can_reject(receipt):
+        flash("You cannot reject this receipt.")
+        return redirect(url_for("dashboard"))
+    
     receipt_application.reject(receipt_id, user.id)
     flash(f"Receipt {receipt_id} rejected")
     return redirect(url_for("dashboard"))
@@ -180,8 +219,21 @@ def get_current_user():
     user_id = session.get("user")
     if user_id is None:
         return None
+    
+    user = user_application.get_user(user_id)
+    
+    if user is None:
+        session.clear()
+        return None
         
     return user_application.get_user(user_id)
+
+def clear_broken_session():
+    user_id = session.get("user")
+    if user_id is not None:
+        user_obj = user_application.get_user(user_id)
+        if user_obj is None:
+            session.clear()
 
 if __name__ == "__main__":
     app.run(debug=True)
