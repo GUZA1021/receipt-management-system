@@ -4,6 +4,9 @@ University project in software engineering. A Flask web application
 implementing a receipt reimbursement workflow: salesmen submit receipts,
 accountants validate them, and managers give final approval or rejection.
 
+Full report — requirements analysis, C4 diagrams, UML, test coverage and
+API specification: [ReceiptSystemReport.pdf](ReceiptSystemReport.pdf)
+
 ## Workflow
 
     PENDING --(accountant validates)--> HANDLED --(manager decides)--> APPROVED
@@ -73,8 +76,10 @@ Then open http://localhost:5000. Demo accounts are seeded in `database.py`.
 ## Technologies
 Python, Flask, Jinja, pytest, pytest-cov, OpenAPI
 
+
 ## Team
-Four-person group project.
+Karim Amin, Mohammad Amin, Jon Termkolli Gashi, Taaha Khan.
+Report authorship is credited per section in Appendix A.
 
 ## Disclaimer
 Developed for educational purposes as part of a university course.
