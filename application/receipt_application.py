@@ -4,26 +4,24 @@ from factories.receipt_factory import ReceiptFactory
 
 
 class ReceiptApplication:
+    """
+    Application layer for working with receipts.
+    Handles receipt creation and transitions between states of receipts
+    """
 
     def __init__(self, receipts, users):
         self.repo = receipts
         self.users = users
 
-    # def get_user(self, user_id):
-    #     """Find user by id"""
-    #     for x in self.users:
-    #         if x.id == user_id:
-    #             return x
-
 
     def get_receipt(self, receipt_id):
-        """Finds the receipt with the id"""
+        """Return a receipt with a given id"""
         for x in self.repo:
             if x.id == receipt_id:
                 return x
     
     def get_user_receipt(self, user_id):
-        """Findes all receipts from user"""
+        """Return all receipts submitted by user."""
         result = []
         for x in self.repo:
             if x.submitter_id == user_id:
@@ -32,19 +30,25 @@ class ReceiptApplication:
     
 
     def get_by_status(self, status):
+        """Return all receipts with a given status"""
         result = []
         for x in self.repo:
             if x.status == status:
                 result.append(x)
         return result
+    
+    def get_all(self):
+        """Return all receipts."""
+        return self.repo
 
 
     def create_receipt(self, user_id, amount, image_path):
         receipt = ReceiptFactory.create(user_id, amount, image_path)
+        self.repo.append(receipt)
+
         return receipt
     
-    def get_all(self):
-        return self.repo
+
 
     def handle(self, receipt_id, accountant_id):
         receipt = self.get_receipt(receipt_id)

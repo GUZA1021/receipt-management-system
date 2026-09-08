@@ -1,5 +1,4 @@
-from models import User, Salesman, Accountant, UserRole, Receipt
-from enums import ReceiptStatus
+from models import Receipt
 from database import receipts
 
 class ReceiptFactory:
@@ -9,6 +8,5 @@ class ReceiptFactory:
         
         new_id = len(receipts) + 1
         receipt = Receipt(new_id, amount, image_path, user_id)
-        receipts.append(receipt)
         
         return receipt

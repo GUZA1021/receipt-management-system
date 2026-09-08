@@ -3,10 +3,10 @@ from database import users, receipts
 from application.user_application import UserApplication
 from application.receipt_application import ReceiptApplication
 from enums import UserRole, ReceiptStatus
+import os
 
 app = Flask(__name__)
-app.secret_key = "secretkey"
-
+app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
 
 receipt_application = ReceiptApplication(receipts, users)
 user_application = UserApplication(users)

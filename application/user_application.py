@@ -1,7 +1,10 @@
 from factories.user_factory import UserFactory
 
 class UserApplication:
-
+    """
+    Applicatoin layer responsible for managing, authenticate and creating users
+    """
+    
     def __init__(self, users):
         self.repo = users
 
@@ -16,6 +19,7 @@ class UserApplication:
                 return user
 
     def get_user(self, user_id):
+        """Return a user by a given user ID"""
         for x in self.repo:
             if x.id == user_id:
                 return x
